@@ -1,0 +1,219 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<title>周期表</title>
+	<meta charset="UTF-8">
+</head>
+<body>
+{#导航区域#}
+<div style="padding:20px; background-color: black; color: orange; position: fixed; top:0; left:0; right:0; z-index: 999;">
+	<span style="font-weight: bold;">任务管理系统</span>
+</div>
+
+
+
+{#页面主体#}
+{% verbatim %}
+<div id="gantt" ng-app="ganttApp" ng-controller="ganttCtrl" style="margin-top:60px; border: solid 1px #eee;">
+	<!--控制按钮-->
+	<div style="margin-bottom: 5px;">
+		<button disabled style="opacity:1; color:orange;">【{{ projectName }}】项目</button>
+		<button ng-click="createOneTask(0)">新增一级任务</button>
+		|
+		<button ng-click="filter_showSubmitted()">待审核</button>
+		<button ng-click="filter_showAll()">ALL</button>
+		|
+		<!--<button ng-click="tempTest()">TEMP TEST</button>-->
+	</div>
+
+	<!--标题行-->
+	<table cellspacing="0" cellpadding="0">
+		<tr>
+			<td valign="top">
+				<div id="ganttTaskTitle">
+					<table border="0" cellspacing="0" cellpadding="0">
+						<tr>
+							<td>
+								<div class="ganttCell_name">任务</div>
+							</td>
+							<td>
+								<div class="ganttCell_date">开始日期</div>
+							</td>
+							<td>
+								<div class="ganttCell_date">结束日期</div>
+							</td>
+							<td>
+								<div class="ganttCell_owner">制作人</div>
+							</td>
+							<td>
+								<div class="ganttCell_status">状态</div>
+							</td>
+							<td>
+								<!--<div class="ganttCell_null">操作</div>-->
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+			<td valign="top">
+				<div id="ganttCalendarTitle">
+					<div id="ganttCalendarTitle_innerDiv">
+						<table border="0" cellspacing="0" cellpadding="0">
+							<tr>
+								<td ng-repeat="date in dateList">
+									<div class="ganttCell_oneDay">{{ date[0] }}</div>
+									<div class="ganttCell_oneDay">{{ date[1] }}</div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+
+	<!--内容行-->
+	<table cellspacing="0" cellpadding="0" ng-mouseover="global_makeTaskDivDraggable()">
+		<tr>
+			<td valign="top">
+				<div id="ganttTaskBody">
+					<table border="0" cellspacing="0" cellpadding="0">
+						<tr ng-repeat="task in taskList" id="ganttCell_taskInfo_row_{{ task.id }}" class="taskRow" data-status="{{ task.status }}">
+							<td>
+								<div class="ganttCell_name" data-taskId="{{ task.id }}" title="task">
+									<div class="ganttCell_name_innerDiv" style="margin-left:{{ task.level * 10 + 3 }}px;" title="{{ task.name }} - {{ task.desc }}">{{ task.name }}</div>
+								</div>
+							</td>
+							<td>
+								<div class="ganttCell_date">{{ task.bgnDateStr }}</div>
+							</td>
+							<td>
+								<div class="ganttCell_date">{{ task.endDateStr }}</div>
+							</td>
+							<td>
+								<div class="ganttCell_owner">{{ task.ownerName }}</div>
+							</td>
+							<td>
+								<div class="ganttCell_status" style="background-color: {{ task.statusDesc[1] }};padding:3px; border-radius:3px;" data-status="{{ task.status }}" ng-click="makeTaskApproval(task.id)">{{ task.statusDesc[0] }}</div>
+							</td>
+							<td>
+								<div class="ganttCell_null">
+									<div class="taskActionBtn" style="background-color:green;  color:white;" ng-click="createOneTask(task.id)">增</div>
+									<div class="taskActionBtn" style="background-color:yellow; color:black;" ng-click="modifyOneTask(task.id)">改</div>
+									<div class="taskActionBtn" style="background-color:red;    color:white;" ng-click="deleteOneTask(task.id)">删</div>
+								</div>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</td>
+			<td valign="top">
+				<div id="ganttCalendarBody">
+					<div id="ganttCalendarBody_innerDiv">
+						<table border="0" cellspacing="0" cellpadding="0" width="100%" style="background: url('static/tasks/calendar-background.png')">
+							<tr ng-repeat="task in taskList" id="ganttCell_taskDiv_row_{{ task.id }}" class="taskDivRow" data-status="{{ task.status }}">
+								<td colspan="{{ dayCount }}">
+									<!--<div class="ganttCell_taskDiv" id="taskDiv_{{ task.id }}" style="width:{{ task.durationDays * cfg_taskDivWidth }}px; left:{{ task.offsetDays * cfg_taskDivWidth }}px;"></div>-->
+									<div class="ganttCell_taskDiv" id="taskDiv_{{ task.id }}" data-offsetDays="{{ task.offsetDays }}" data-durationDays="{{ task.durationDays }}" style="width:20px; left:0;"></div>
+								</td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+
+	<!--对话框: 添加/修改任务-->
+	<div id="taskDetailDialog" title="任务详情" style="display: none;">
+		<table border="0">
+			<tr style="display: none;">
+				<td>模式</td>
+				<td> {{ curTask.mode }}</td>
+			</tr>
+			<tr style="display: none;">
+				<td>父ID</td>
+				<td> {{ curTask.parentTaskId }}</td>
+			</tr>
+			<tr>
+				<td width="80px">名称</td>
+				<td width="300px">
+					<input type="text" class="taskInfoDlg_item" ng-model="curTask.name">
+				</td>
+			</tr>
+			<tr>
+				<td>类型</td>
+				<td>
+					<select ng-model="curTask.type" ng-options="taskType.name as taskType.desc for taskType in taskTypeArray"></select>
+				</td>
+			</tr>
+			<tr>
+				<td>描述</td>
+				<td>
+					<textarea class="taskInfoDlg_item" ng-model="curTask.desc" style="height:3em; vertical-align: top;"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>附图</td>
+				<td>
+					<ul id="fileListServer" style="display: none;"></ul>
+					<ul id="fileList" style="padding: 0 0 0 20px; margin:5px 0;"></ul>
+					<div id="container">
+						<a id="browse" href="javascript:;">[浏览]</a>
+						<a id="start-upload" href="javascript:;">[上传]</a>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td>日期</td>
+				<td>
+					<input type="text" class="taskInfoDlg_item" ng-model="curTask.bgnDateStr" id="tadkInfoDlg_bgnDate" style="width:100px; display:inline-block;">
+					~
+					<input type="text" class="taskInfoDlg_item" ng-model="curTask.endDateStr" id="tadkInfoDlg_endDate" style="width:100px; display:inline-block;">
+				</td>
+			</tr>
+			<tr>
+				<td>制作人</td>
+				<td>
+					<select ng-model="curTask.owner" ng-options="staff.id as staff.name for staff in staffList"></select>
+				</td>
+			</tr>
+			<tr>
+				<td>状态</td>
+				<td>
+					<select ng-model="curTask.status" ng-options="status for status in taskStatusArray" disabled></select>
+				</td>
+			</tr>
+		</table>
+	</div>
+
+	<!-- 审核任务对话框 -->
+	<div id="taskApprovalDlg" title="任务审核" data-taskId="0" style="display: none; text-align: right;">
+		<button ng-click="sendBack_approveTask()">通过</button>
+		<button ng-click="sendBack_rejectTask()">退回</button>
+	</div>
+</div>
+{% endverbatim %}
+
+
+
+{#页脚#}
+<div style="text-align: center;color: #aaa; font-size: xx-small; padding: 10px;">
+	&copy; chosen 2015
+</div>
+
+
+
+{#外部库#}
+<link rel="stylesheet" type="text/css" href="{% static 'tasks/themes/excite-bike/jquery-ui.css' %}"/>
+<script src="{% static 'tasks/jquery-2.1.4.js' %}"></script>
+<script src="{% static 'tasks/jquery-ui-1.11.4.js' %}"></script>
+<script src="{% static 'tasks/angular-1.2.16.js' %}"></script>
+<script src="{% static 'tasks/moment-2.10.6.js' %}"></script>
+<script type="text/javascript" src="/static/tasks/plupload.full.min.js"></script>
+{#我的代码#}
+<link rel="stylesheet" type="text/css" href="{% static 'tasks/style.css' %}"/>
+<script src="{% static 'tasks/gantt.js' %}"></script>
+</body>
+</html>

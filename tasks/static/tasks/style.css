@@ -1,0 +1,163 @@
+/* #### 通用 #### */
+.menuItem {
+	cursor: pointer;
+}
+
+/* #### 首页 #### */
+.navigationBarItem {
+	color: orange;
+}
+
+.task {
+	border-left: solid 3px red;
+	/*border-radius: 3px;*/
+	margin: 5px 0;
+	padding: 3px;
+	cursor: pointer;
+}
+
+.hover {
+	background-color: #F0F0F0;
+	color: red;
+}
+
+.selected {
+	background-color: bisque;
+	color: red;
+}
+
+.menuItemHover {
+	text-decoration: underline;
+}
+
+/* 添加项目对话框 */
+.newProjectDialog_item {
+	border: solid 1px #999;
+	width: 500px;
+	margin: 1px;
+}
+
+/* #### 甘特图 #### */
+#gantt {
+	font-size: 8px;
+}
+
+#ganttTaskTitle, #ganttTaskBody {
+	width: 475px;
+}
+
+#ganttTaskTitle {
+	/*color: red;*/
+	font-weight: bold;
+}
+
+#ganttCalendarTitle, #ganttCalendarBody {
+	width: 1000px;
+	overflow-x: hidden;
+}
+
+#ganttCalendarTitle_innerDiv, #ganttCalendarBody_innerDiv {
+	width: 10000px;
+	/*background-color: bisque;*/
+}
+
+#ganttCalendarTitle_innerDiv {
+	/*color: red;*/
+	font-weight: bold;
+	position: relative;
+}
+
+.ganttCell_name {
+	width: 180px;
+	overflow: hidden;
+}
+
+.ganttCell_null {
+	width: 70px;
+	height: 20px;
+	padding: 0 1px;
+}
+
+.ganttCell_name_innerDiv {
+	border-left: solid 3px red;
+	/*margin-left: 3px;*/
+	padding-left: 3px;
+	width: 500px;
+	cursor: default;
+	font-weight: bold;
+}
+
+.ganttCell_date {
+	width: 70px;
+	cursor: default;
+	text-align: center;
+}
+
+.ganttCell_owner {
+	width: 40px;
+	cursor: default;
+	text-align: center;
+}
+
+.ganttCell_status {
+	width: 40px;
+	cursor: default;
+	text-align: center;
+}
+
+.ganttCell_oneDay {
+	width: 20px;
+	text-align: center;
+}
+
+.ganttCell_taskDiv {
+	position: relative;
+	width: 98px;
+	height: 18px;
+	margin: 1px 0;
+	background-color: #fed22f;
+	border-radius: 3px;
+}
+
+.taskActionBtn {
+	display: inline-block;
+	font-size: 8pt;
+	font-weight: bold;
+	cursor: pointer;
+	padding: 3px;
+	margin-top: 1px;
+	border-radius: 2px;
+}
+
+.ui-tooltip {
+	font-size: 8pt;
+}
+
+/* 任务详情对话框 */
+.taskInfoDlg_item {
+	border: solid 1px #999;
+	width: 500px;
+}
+
+/* #### My Cam #### */
+.td {
+	border: solid 1px #ccc;
+}
+
+.camName {
+	width: 100px;
+	border: solid 1px #ccc;
+}
+
+.camPic {
+	border: solid 1px #ccc;
+	width: 200px;
+}
+
+.camPart {
+	border: solid 1px #ccc;
+	width: 100px;
+	text-align: center;
+}
+
+/* END */

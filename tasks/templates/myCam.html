@@ -1,0 +1,59 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>进度表</title>
+</head>
+<body>
+{#导航区域#}
+<div style="padding:20px; background-color: black; color: orange; position: fixed; top:0; left:0; right:0; z-index: 999;">
+	<span style="font-weight: bold;">任务管理系统</span>
+</div>
+
+
+
+{#页面主体#}
+{% verbatim %}
+<div ng-app="myCamApp" ng-controller="myCamCtrl" style="margin-top:60px;">
+	<div style="margin:5px 0;">项目: {{ projectName }}</div>
+
+	<table id="myCamTable" cellspacing="1" cellpadding="3" border="0">
+		<!-- 标题行 -->
+		<tr style="text-align: center; background-color: #d9d6c4;">
+			<td class="camName" colspan="2">镜头</td>
+
+			<td class="camPart">LAYOUT</td>
+			<td class="camPart">动画</td>
+			<td class="camPart">特效</td>
+			<td class="camPart">解算</td>
+			<td class="camPart">灯光</td>
+			<td class="camPart">合成</td>
+		</tr>
+		<!-- 正文行 -->
+		<tr ng-repeat="cam in camList">
+			<td class="camName">{{ cam.name }}</td>
+			<td class="camPic">{{ cam.picUrl }}</td>
+
+			<td class="camPart" style="background-color: {{ cam['LAYOUT'] }}">&nbsp;</td>
+			<td class="camPart" style="background-color: {{ cam['动画'] }}">&nbsp;</td>
+			<td class="camPart" style="background-color: {{ cam['特效'] }}">&nbsp;</td>
+			<td class="camPart" style="background-color: {{ cam['解算'] }}">&nbsp;</td>
+			<td class="camPart" style="background-color: {{ cam['灯光'] }}">&nbsp;</td>
+			<td class="camPart" style="background-color: {{ cam['合成'] }}">&nbsp;</td>
+		</tr>
+	</table>
+</div>
+{% endverbatim %}
+
+{#外部库#}
+<link rel="stylesheet" type="text/css" href="{% static 'tasks/themes/excite-bike/jquery-ui.css' %}"/>
+<script src="{% static 'tasks/jquery-2.1.4.js' %}"></script>
+<script src="{% static 'tasks/jquery-ui-1.11.4.js' %}"></script>
+<script src="{% static 'tasks/angular-1.2.16.js' %}"></script>
+<script src="{% static 'tasks/moment-2.10.6.js' %}"></script>
+{#我的代码#}
+<link rel="stylesheet" type="text/css" href="{% static 'tasks/style.css' %}"/>
+<script src="{% static 'tasks/myCam.js' %}"></script>
+</body>
+</html>

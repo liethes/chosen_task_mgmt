@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="app">
+<head>
+	<meta charset="UTF-8">
+	<title>测试Directive</title>
+</head>
+<body>
+<div>hello Directive</div>
+
+<hello></hello>
+
+<script src="../tasks/angular-1.2.16.js"></script>
+<script>
+	var appModule = angular.module('app', []);
+
+	appModule.directive('hello', function () {
+		return {
+			restrict: 'E',
+			template: '<div>Hi</div>',
+			replace: true
+		}
+	})
+</script>
+</body>
+</html>

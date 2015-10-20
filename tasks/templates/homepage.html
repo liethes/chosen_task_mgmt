@@ -1,0 +1,98 @@
+{% load staticfiles %}
+<html>
+<head>
+	<title>任务管理系统 - 首页</title>
+	<meta charset="utf-8"/>
+</head>
+<body>
+<div>{{ test_info }}</div>
+
+{# 导航区域 #}
+<div id="navigationBar" style="padding:20px; background-color: black; color: orange; position: fixed; top:0; left:0; right:0; z-index: 999;">
+	<span style="font-weight: bold;">CHOSEN 任务管理系统</span>
+	<span style="color:#333;">|</span>
+
+	<span class="menuItem"><a class="navigationBarItem" href="/">我的任务</a></span> ·
+
+	<span class="btn-group" style="margin-bottom: 3px;">
+		<button class="btn btn-default btn-xs dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">项目 <span class="caret"></span></button>
+		<ul class="dropdown-menu">
+			<li id="projectList_seperator" role="seperator" class="divider"></li>
+			<li><a href="/">全部项目</a></li>
+			<li role="seperator" class="divider"></li>
+			<li><a href="#" onclick="openNewProjectDialog()">新建项目</a></li>
+		</ul>
+	</span>
+	<span style="font-weight: bold; background-color: orange; color: white; border-radius: 3px; padding: 2px 0 3px 0;">【<span id="curProjectName"></span>】</span> ·
+
+	<span class="menuItem"><a id="menuItem_toGantt" class="navigationBarItem" style="display: none;" target="_blank">周期表</a></span> ·
+	<span class="menuItem"><a id="menuItem_toMyCam" class="navigationBarItem" style="display: none;" target="_blank">进度表</a></span>
+
+	<span style="position: absolute; right: 50px;">{{ username }}</span>
+	<span style="position: absolute; right: 15px;"><a href="/logout">登出</a></span>
+</div>
+
+
+
+{# 主体区域 #}
+<div style="margin-top:60px;">
+	<table style="width:100%; border: solid 1px #999;">
+		<tr style="background-color: #eee;">
+			<td style="padding:3px;">任务</td>
+			<td style="padding:3px;">任务详情</td>
+			<td style="padding:3px;">项目</td>
+		</tr>
+		<tr style="height:500px; vertical-align: top;">
+			<td id="taskList" style="width:20%; padding: 3px;"></td>
+			<td id="taskDetail" style="width:50%; border-left:solid 1px #eee;"></td>
+			<td id="projectInfo" style="width:30%; border-left:solid 1px #eee;"></td>
+		</tr>
+	</table>
+</div>
+
+
+
+{# 页脚 #}
+<div style="text-align: center;color: #aaa; font-size: xx-small; padding: 10px;">
+	&copy; chosen 2015
+</div>
+
+
+
+{# 新建项目对话框 #}
+<div id="newProjectDialog" title="新建项目" style="display: none;">
+	<table border="0">
+		<tr>
+			<td width="50px">名称</td>
+			<td width="300px">
+				<input class="newProjectDialog_item" id="newProjectDialog_name">
+			</td>
+		</tr>
+		<tr>
+			<td>描述</td>
+			<td>
+				<textarea class="newProjectDialog_item" id="newProjectDialog_desc" style="height:3em; vertical-align: top;"></textarea>
+			</td>
+		</tr>
+		<tr>
+			<td>大图</td>
+			<td>
+				<input class="newProjectDialog_item">
+			</td>
+		</tr>
+	</table>
+</div>
+
+
+
+{# JS和CSS #}
+<link rel="stylesheet" type="text/css" href="{% static 'tasks/themes/excite-bike/jquery-ui.css' %}"/>
+<link rel="stylesheet" href="{% static 'tasks/bootstrap.min.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'tasks/style.css' %}"/>
+
+<script src="{% static 'tasks/jquery-2.1.4.js' %}"></script>
+<script src="{% static 'tasks/jquery-ui-1.11.4.js' %}"></script>
+<script src="{% static 'tasks/bootstrap.min.js' %}"></script>
+<script src="{% static 'tasks/homepage.js' %}"></script>
+</body>
+</html>

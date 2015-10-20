@@ -1,0 +1,27 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>文件上传</title>
+</head>
+<body>
+<h1>文件上传</h1>
+
+<form id="fileUploadForm" method="post" enctype="multipart/form-data" action="/uploader/add">
+	<input type="file" name="file">
+</form>
+
+<button onclick="doSubmit()">上传</button>
+
+
+
+<script src="{% static 'tasks/jquery-2.1.4.js' %}"></script>
+<script>
+	function doSubmit() {
+		$('#fileUploadForm').submit();
+	}
+</script>
+</body>
+</html>
